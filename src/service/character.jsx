@@ -1,16 +1,17 @@
 export const reqCharacter = async (character) => {
-    let url = `https://rickandmortyapi.com/api/character?page=1`;
+    const page =+ 1
+    let url = `https://rickandmortyapi.com/api/character?page=${page}`
     
     if (character && typeof character === 'string' && character.trim() !== "") {
-        url += `&name=${encodeURIComponent(character)}`;
+        url += `&name=${(character.name)}`
     }
     
     try {
-        const response = await fetch(url);
+        const response = await fetch(url)
         
-        const data = await response.json();
-        return data;
+        const data = await response.json()
+        return data
     } catch (error) {
        
     }
-};
+}

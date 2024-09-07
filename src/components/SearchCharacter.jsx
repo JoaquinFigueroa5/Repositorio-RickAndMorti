@@ -1,29 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export const SearchCharacter = ({ onSearch }) => {
-    const [character, setCharacter] = useState('');
+export const SearchCharacter = ({ onSearch, characters }) => {
+    const [character, setCharacter] = useState('')
+    const [species, setSpecies] = useState([])
+    const [selectedSpecies, setSelectedSpecies] = useState('')
 
+    useEffect(() => {
+        if (characters && characters.length > 0) {
+            const uniqueSpecies = [...new Set(characters.map((char) => char.species))];
+            setSpecies(uniqueSpecies);
+        }
+    }, [characters])
+    
     const handleSubmit = (e) => {
-        e.preventDefault(); // Previene el comportamiento predeterminado del formulario (recarga de página)
-        onSearch(character); // Llama a la función onSearch pasando el valor del estado character
+        e.preventDefault()
+        onSearch(character)
     };
 
     return (
-        <div className="container d-flex flex-row justify-content-center align-items-center mt-5">
-            <form className="d-flex" onSubmit={handleSubmit}>
-                <input 
-                    className="form-control" 
-                    type="text" 
-                    value={character} // Usa el estado character como valor del input
-                    onChange={(e) => setCharacter(e.target.value)} // Actualiza el estado character en cada cambio del input
-                    placeholder="Buscar personaje" // Opcional, para mejor experiencia de usuario
-                />
-                <input 
-                    className="btn btn-outline-dark" 
-                    type="submit" 
-                    value="Buscar Personaje"
-                />
-            </form>
-        </div>
+        <>
+            <div className="container d-flex flex-row justify-content-center align-items-center mt-5">
+                <form className="d-flex" onSubmit={handleSubmit}>
+                    <input className="form-control" type="text" value={character} onChange={(e) => setCharacter(e.target.value)} placeholder="Buscar personaje"/>
+                    <input className="btn btn-outline-dark" type="submit" value="Buscar Personaje"/>
+                </form>
+            </div>
+            
+            <div className="container d-flex flex-row justify-content-center align-items-center mt-5">
+                <select className="form-select" value={selectedSpecies} onChange={(e) => setSelectedSpecies(e.target.value)}>
+                    <option value="">Selecciona una especie</option>
+                    {species.map((specie, index) => (
+                        <option key={index} value={specie}>
+                            {specie}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        </>
     );
-};
+}

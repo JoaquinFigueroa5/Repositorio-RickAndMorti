@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react"
 import { SearchCharacter } from "./SearchCharacter"
-import { Pagination } from "@mui/material"
 import { GridCharacter } from "./GridCharacter"
 import { useCharacters } from "../hook/useCharacter"
+import { Pagination } from "./Pagination"
 
 
 
 export const RickAndMortyApp = () => {
     const [currentpage, setCurrentpage] = useState(1)
     const [searchCharacter, setSearchCharacter] = useState("")
-    const { characters, total } = useCharacters(currentpage, searchCharacter);
+    const { characters, info } = useCharacters(currentpage, searchCharacter);
     
     
 
     const handleSearch = (character) => {
         setSearchCharacter(character)
+        setCurrentpage(1)
     }
     
   return (
     <>
         <SearchCharacter onSearch={handleSearch}/>
         <GridCharacter characters={characters} />
-        <Pagination className="d-flex justify-content-center" count={Math.round(total/20)} onChange={(e, value) => (setCurrentpage(value))}/>
+        <Pagination className="d-flex justify-content-center" count={info.pages || 1} page={currentpage} onChange={(e, value) => (setCurrentpage(value))}/>
     </>
   )
 }
